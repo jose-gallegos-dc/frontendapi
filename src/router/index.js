@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import CompanyView from '../views/CompanyView.vue'
 import EditCompanyView from '../views/Company/EditCompanyView.vue'
+import  CreateCompanyView from '@/views/Company/CreateCompanyView.vue'
 
 Vue.use(VueRouter)
 
@@ -24,10 +25,16 @@ const routes = [
     component: CompanyView
   },
   {
-    path: '/editCompany/:id',
-    name: 'editCompany',
+    path: '/company/create',
+    name: 'company/create',
+    component: CreateCompanyView
+  },
+  {
+    path: '/company/:id',
+    name: 'company/:id',
     component: EditCompanyView
   },
+ 
   
 ]
 

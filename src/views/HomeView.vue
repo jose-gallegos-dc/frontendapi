@@ -11,8 +11,8 @@
 
                 <!-- Login Form -->
                 <form v-on:submit.prevent="login">
-                <input type="text" id="email" class="fadeIn second" name="email" placeholder="email" v-model="email">
-                <input type="password" id="password" class="fadeIn third" name="login" placeholder="password" v-model="password">
+                <input type="text" id="email" class="fadeIn second" name="email" placeholder="email" v-model="form.email">
+                <input type="password" id="password" class="fadeIn third" name="login" placeholder="password" v-model="form.password">
                 <input type="submit" class="fadeIn fourth" value="Log In">
                 </form>
 
@@ -36,8 +36,10 @@ export default {
 
   data: function(){
     return{
-        email: "",
-        password: "",
+        form: {
+            email: "",
+            password: ""
+        },
         error_alert: false,
         error_message: ""
     }
@@ -45,22 +47,16 @@ export default {
 
   methods:{
     login(){
-        let jsonForm = {
-            "email": this.email,
-            "password": this.password
-        };
-        axios.post('http://api-auth.test/api/auth/login', jsonForm)
-        .then(data =>{
-            if(data.data.status){
+        axios.post('http://api-auth.test/api/auth/login', this.form)
+        .then(response =>{
+            if(response.data.status){
                 
                 this.error_alert = false;
-                var token = data.data.token;
-                this.$cookies.set('token',token);
+                this.$cookies.set('token',response.data.token);
                 this.$router.push('dashboard');
             }
         })
         .catch(error =>{
-            console.log(error.response.data.message);
             this.error_alert = true;
             this.error_message = error.response.data.message;
         });

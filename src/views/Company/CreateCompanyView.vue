@@ -26,9 +26,12 @@
                     <label for="website" class="form-label">Website</label>
                     <input type="text" class="form-control" id="website" placeholder="website" v-model="form.website" />
                 </div>
-                <button type="button" class="btn btn-primary" v-on:click="update()">Edit</button>
-                <button type="button" class="btn btn-danger margen mx-2" v-on:click="destroy()">Delete</button>
-                <button type="button" class="btn btn-dark margen" v-on:click="exit()">Exit</button>
+                <button type="button" class="btn btn-primary mx-2" v-on:click="save()">
+                    Save
+                </button>
+                <button type="button" class="btn btn-dark margen" v-on:click="exit()">
+                    Exit
+                </button>
             </form>
         </div>
         </LayoutDefault>
@@ -39,7 +42,7 @@
 import axios from "axios";
 import LayoutDefault from "@/layouts/LayoutDefault.vue";
 export default {
-    name: "EditCompanyView",
+    name: "CreateCompanyView",
 
     components: {
     LayoutDefault
@@ -47,7 +50,6 @@ export default {
 
     data() {
         return {
-            companyId: null,
             form: {
                 name: "",
                 email: "",
@@ -58,15 +60,16 @@ export default {
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization": 'Bearer ' + this.$cookies.get('token')
             },
-            url: "http://api-auth.test/api/companies/" + this.$route.params.id,
             error_alert: false,
             error_messages: []
         };
     },
 
     methods: {
-        update(){
-            axios.put(this.url, this.form, { headers: this.headers }).then((response) => {
+
+        save(){
+            const url= "http://api-auth.test/api/companies";
+            axios.post(url, this.form, {headers: this.headers}).then((response) =>{
                 this.error_alert = false;
                 this.$swal.fire({
                     position: 'top-end',
@@ -82,45 +85,14 @@ export default {
             });
         },
 
-        destroy(){
-            this.$swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    axios.delete(this.url, {headers: this.headers}).then((response) =>{
-                        this.$router.push("/company");
-                        this.$swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: response.data.message,
-                        showConfirmButton: false,
-                        timer: 1500
-                        }); 
-                    });   
-                }
-            })
-        },
-
         exit() {
             this.$router.push("/company");
-        },
+        }
+       
     },
 
     mounted: function () {
    
-        const url = "http://api-auth.test/api/companies/" + this.$route.params.id;
-        axios.get(url, { headers: this.headers }).then((response) => {
-            this.form.name = response.data.data.name;
-            this.form.email = response.data.data.email;
-            this.form.logo = response.data.data.logo;
-            this.form.website = response.data.data.website;
-        });
     },
 };
 </script>

@@ -1,20 +1,18 @@
 <template>
     <div>
-       <HeaderComponent/>
+        <LayoutDefault>
             <h1>Dashboard</h1>
-       <FooterComponent/>
+        </LayoutDefault>
     </div>
 </template>
 
 <script>
-import HeaderComponent from "../components/HeaderComponent.vue";
-import FooterComponent from "../components/FooterComponent.vue";
+import LayoutDefault from '@/layouts/LayoutDefault.vue';
 
 export default{
     name: "DashboardView",
     components:{
-    HeaderComponent,
-    FooterComponent
+    LayoutDefault
 }
 }
 </script>

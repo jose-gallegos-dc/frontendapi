@@ -1,7 +1,9 @@
 <template>
     <div>
-       <HeaderComponent/>
-       <div class="container pt-5">
+       <LayoutDefault>
+       <div class="container pt-5 left">
+
+            <button class="btn btn-primary my-4" v-on:click="create()">New Company</button>
             <table class="table table-striped table-hover">
             <thead>
                 <tr>
@@ -23,52 +25,56 @@
             </table>
        </div>
        
-       <FooterComponent/>
+    </LayoutDefault>
     </div>
 </template>
 
 <script>
-import HeaderComponent from "@/components/HeaderComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
+
 import axios from 'axios';
+import LayoutDefault from '@/layouts/LayoutDefault.vue';
 export default{
     name: "CompanyView",
 
     data(){
         return{
-            companyList: null
+            companyList: null,
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                "Authorization": 'Bearer ' + this.$cookies.get('token')
+            }
         }
     },
 
     components:{
-        HeaderComponent,
-        FooterComponent
+        LayoutDefault
     },
 
     methods: {
 
         edit(id){
-            this.$router.push('/editCompany/'+id);
+            this.$router.push('/company/'+id);
+        },
+
+        create(){
+            this.$router.push('/company/create');
         }
+
+
     },
 
     mounted:function(){
-
-        let token = this.$cookies.get('token');
+      
         const url = 'http://api-auth.test/api/companies';
-
-        let headers = {
-            "Content-type": "application/json; charset=UTF-8",
-            "Authorization": 'Bearer ' + token
-        };
-
-        axios.get(url, {headers: headers}).then(data =>{
+        axios.get(url, {headers: this.headers}).then(data =>{
             this.companyList = data.data.data;
-        })
+        }); 
     }
 }
 </script>
 
 <style scoped>
-
+.left {
+    text-align: left;
+}
 </style>
