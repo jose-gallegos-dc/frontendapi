@@ -12,19 +12,19 @@
             <form>
                 <div class="mb-3 left">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" placeholder="name" v-model="form.name" />
+                    <input type="text" class="form-control" placeholder="name" v-model="name" />
                 </div>
                 <div class="mb-3 left">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="email" v-model="form.email" />
+                    <input type="email" class="form-control" placeholder="email" v-model="email" />
                 </div>
                 <div class="mb-3 left">
-                    <label for="logo" class="form-label">Logo</label>
-                    <input type="text" class="form-control" id="logo" placeholder="logo" v-model="form.logo" />
+                    <label for="email" class="form-label">Logo</label>
+                    <input type="file" class="form-control" @change="onFileChange" placeholder="Choose a file or drop it here..."/>
                 </div>
                 <div class="mb-3 left">
                     <label for="website" class="form-label">Website</label>
-                    <input type="text" class="form-control" id="website" placeholder="website" v-model="form.website" />
+                    <input type="text" class="form-control" placeholder="website" v-model="website" />
                 </div>
                 <button type="button" class="btn btn-primary mx-2" v-on:click="save()">
                     Save
@@ -50,14 +50,13 @@ export default {
 
     data() {
         return {
-            form: {
-                name: "",
-                email: "",
-                logo: "",
-                website: "",
-            },
+            formData: new FormData(),
+            name: null,
+            email: null,
+            website: null,
             headers: {
-                "Content-type": "application/json; charset=UTF-8",
+                "Content-type": "multipart/form-data; charset=UTF-8",
+                "Accept": "application/json",
                 "Authorization": 'Bearer ' + this.$cookies.get('token')
             },
             error_alert: false,
@@ -69,7 +68,12 @@ export default {
 
         save(){
             const url= "http://api-auth.test/api/companies";
-            axios.post(url, this.form, {headers: this.headers}).then((response) =>{
+          
+            this.formData.append('name', this.name);
+            this.formData.append('email', this.email);
+            this.formData.append('website', this.website);
+
+            axios.post(url, this.formData, {headers: this.headers}).then((response) =>{
                 this.error_alert = false;
                 this.$swal.fire({
                     position: 'top-end',
@@ -87,6 +91,15 @@ export default {
 
         exit() {
             this.$router.push("/company");
+        },
+
+        onFileChange(e) {
+            let files = e.target.files || e.dataTransfer.files;
+            this.formData.append("logo", files[0]);
+            if (!files.length){
+                this.formData.delete("logo");
+                return;
+            }
         }
        
     },
