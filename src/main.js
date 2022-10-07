@@ -12,7 +12,7 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(VueAxios, axios)
-Vue.use(VueCookies, { expire: '7d'})
+Vue.use(VueCookies)
 Vue.use(VueSweetalert2);
 
 import 'bootstrap/dist/css/bootstrap.css'

@@ -52,7 +52,8 @@ export default {
             if(response.data.status){
                 
                 this.error_alert = false;
-                this.$cookies.set('token',response.data.token);
+               //  this.$cookies.set('token',response.data.token);
+                this.$cookies.set(response.data.token_name, response.data.token_value, response.data.token_expires);
                 this.$router.push('dashboard');
             }
         })

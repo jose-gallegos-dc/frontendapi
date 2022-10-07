@@ -5,7 +5,7 @@
             <div class="alert alert-danger left" role="alert" v-if="error_alert">
                 <ul>
                     <li v-for="error_message in error_messages" :key="error_message.id">
-                        {{error_message[0]}}
+                        {{error_message[0]}} 
                     </li>
                 </ul>
             </div>
@@ -57,7 +57,7 @@ export default {
             headers: {
                 "Content-type": "multipart/form-data; charset=UTF-8",
                 "Accept": "application/json",
-                "Authorization": 'Bearer ' + this.$cookies.get('token')
+                "Authorization": 'Bearer ' + this.$cookies.get('access_token')
             },
             error_alert: false,
             error_messages: []

@@ -56,7 +56,7 @@ export default {
             },
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
-                "Authorization": 'Bearer ' + this.$cookies.get('token')
+                "Authorization": 'Bearer ' + this.$cookies.get('access_token')
             },
             url: "http://api-auth.test/api/companies/" + this.$route.params.id,
             error_alert: false,

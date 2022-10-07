@@ -41,7 +41,7 @@ export default{
             companyList: null,
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
-                "Authorization": 'Bearer ' + this.$cookies.get('token')
+                "Authorization": 'Bearer ' + this.$cookies.get('access_token')
             }
         }
     },
