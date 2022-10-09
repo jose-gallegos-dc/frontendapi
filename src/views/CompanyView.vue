@@ -39,13 +39,12 @@ export default{
     data(){
         return{
             companyList: null,
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                "Authorization": 'Bearer ' + this.$cookies.get('access_token')
-            }
+            // headers: {
+            //     "Content-type": "application/json; charset=UTF-8",
+            //     "Authorization": 'Bearer ' + this.$cookies.get('access_token')
+            // }
         }
     },
-
     components:{
         LayoutDefault
     },
@@ -65,8 +64,12 @@ export default{
 
     mounted:function(){
       
-        const url = 'http://api-auth.test/api/companies';
-        axios.get(url, {headers: this.headers}).then(data =>{
+      //   const url = 'http://api-auth.test/api/companies';
+      //   axios.get(url, {headers: this.headers}).then(data =>{
+      //       this.companyList = data.data.data;
+      //   }); 
+      const url = 'http://api-auth.test/api/companies';
+        axios.get(url).then(data =>{
             this.companyList = data.data.data;
         }); 
     }

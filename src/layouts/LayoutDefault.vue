@@ -5,29 +5,31 @@
         <main class="LayoutDefault">
             <slot/>
         </main>
-    <FooterComponent/>
+    <!-- <FooterComponent/> -->
     </div>
 </template>
 
 
 <script>
 import HeaderComponent from '@/components/HeaderComponent.vue';
-import FooterComponent from '@/components/FooterComponent.vue';
+// import FooterComponent from '@/components/FooterComponent.vue';
 
 export default {
-    name: "LayoutDefault",
+   name: "LayoutDefault",
 
-    data(){
-        return{
-        }
-    },
+   data(){
+      return{
+      }
+   },
 
-    components:{
-        HeaderComponent,
-        FooterComponent
-    },
+   created: function(){
+      this.axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$cookies.get("access_token");
+   },
 
-    mounted(){
-    }
+   components:{
+      HeaderComponent,
+      // FooterComponent
+   }
+   
 }
 </script>

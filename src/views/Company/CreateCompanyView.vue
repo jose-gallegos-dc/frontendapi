@@ -9,6 +9,14 @@
                     </li>
                 </ul>
             </div>
+
+            <!-- <div>
+               <img v-if="url" :src="url" class="logo"/>
+            </div> -->
+              
+          
+
+
             <form>
                 <div class="mb-3 left">
                     <label for="name" class="form-label">Name</label>
@@ -18,9 +26,16 @@
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" placeholder="email" v-model="email" />
                 </div>
-                <div class="mb-3 left">
-                    <label for="email" class="form-label">Logo</label>
-                    <input type="file" class="form-control" @change="onFileChange" placeholder="Choose a file or drop it here..."/>
+                <div class="mb-3 left row">
+                  <div class="col">
+                     <label for="email" class="form-label">Logo</label>
+                     <input type="file" class="form-control" @change="onFileChange" placeholder="Choose a file or drop it here..."/>
+                  </div>
+                  <div class="col">
+                     <label for="preview" class="form-label">Preview</label>
+                     <img v-if="url" :src="url" class="logo"/>
+                  </div>
+                    
                 </div>
                 <div class="mb-3 left">
                     <label for="website" class="form-label">Website</label>
@@ -51,20 +66,32 @@ export default {
     data() {
         return {
             formData: new FormData(),
-            name: null,
-            email: null,
-            website: null,
-            headers: {
-                "Content-type": "multipart/form-data; charset=UTF-8",
-                "Accept": "application/json",
-                "Authorization": 'Bearer ' + this.$cookies.get('access_token')
-            },
+            name: "",
+            email: "",
+            website: "",
+            url: "http://api-auth.test/logos/logo_default.png",
+            // headers: {
+            //     "Content-type": "multipart/form-data; charset=UTF-8",
+            //     "Accept": "application/json",
+            //     "Authorization": 'Bearer ' + this.$cookies.get('access_token')
+            // },
             error_alert: false,
             error_messages: []
         };
     },
 
     methods: {
+
+         onFileChange(e) {
+            let files = e.target.files || e.dataTransfer.files;
+            if(!files.length){
+               this.url = "http://api-auth.test/logos/logo_default.png";
+               this.formData.delete("logo");
+               return;
+            }
+            this.formData.append("logo", files[0]);
+            this.url = URL.createObjectURL(files[0]);
+         },
 
         save(){
             const url= "http://api-auth.test/api/companies";
@@ -73,7 +100,7 @@ export default {
             this.formData.append('email', this.email);
             this.formData.append('website', this.website);
 
-            axios.post(url, this.formData, {headers: this.headers}).then((response) =>{
+            axios.post(url, this.formData).then((response) =>{
                 this.error_alert = false;
                 this.$swal.fire({
                     position: 'top-end',
@@ -91,17 +118,7 @@ export default {
 
         exit() {
             this.$router.push("/company");
-        },
-
-        onFileChange(e) {
-            let files = e.target.files || e.dataTransfer.files;
-            this.formData.append("logo", files[0]);
-            if (!files.length){
-                this.formData.delete("logo");
-                return;
-            }
         }
-       
     },
 
     mounted: function () {
@@ -112,6 +129,11 @@ export default {
 
 <style scoped>
 .left {
-    text-align: left;
+   text-align: left;
+}
+
+.logo {
+   max-width: 150px;
+   max-height: 100px;
 }
 </style>
